@@ -61,7 +61,8 @@ WITH rented_films AS (
     GROUP BY
         film_id
     HAVING 
-        COUNT(DISTINCT rented_bb.customer_id) >= 3)
+        COUNT(DISTINCT rented_bb.customer_id) >= 3
+) 
         
 SELECT
     DISTINCT title
