@@ -19,19 +19,7 @@
  *    I did this by using the SELECT DISTINCT clause.
  */
 
-WITH rented_films AS (
-    SELECT 
-        film_id,
-        customer_id
-    FROM
-        rental    
-    JOIN    
-        inventory USING(inventory_id)
-    JOIN
-        film USING(film_id)
-    ),
-    
-    bb_customers AS (
+WITH bb_customers AS (
     SELECT
         customer_id
     FROM
@@ -44,6 +32,18 @@ WITH rented_films AS (
         film.film_id = 103
     ),
 
+    rented_films AS (
+    SELECT 
+        film_id,
+        customer_id
+    FROM
+        rental    
+    JOIN    
+        inventory USING(inventory_id)
+    JOIN
+        film USING(film_id)
+    ),  
+
     rented_bb AS (
     SELECT
         *
@@ -53,7 +53,7 @@ WITH rented_films AS (
         customer_id IN (SELECT * FROM bb_customers)
     ),
 
-    similar AS (    
+    films AS (    
     SELECT
         film_id
     FROM 
@@ -62,14 +62,14 @@ WITH rented_films AS (
         film_id
     HAVING 
         COUNT(DISTINCT rented_bb.customer_id) >= 3
-) 
+    ) 
         
 SELECT
     DISTINCT title
 FROM
     film
 JOIN
-    similar AS a USING(film_id)
+    films AS a USING(film_id)
 WHERE 
     film_id != 103
 ORDER BY
