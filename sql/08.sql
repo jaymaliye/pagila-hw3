@@ -19,7 +19,19 @@
  *    I did this by using the SELECT DISTINCT clause.
  */
 
-WITH bb_customers AS (
+WITH rented_films AS (
+    SELECT 
+        film_id,
+        customer_id
+    FROM
+        rental    
+    JOIN    
+        inventory USING(inventory_id)
+    JOIN
+        film USING(film_id)
+    ),  
+
+    bb_customers AS (
     SELECT
         customer_id
     FROM
@@ -31,18 +43,6 @@ WITH bb_customers AS (
     WHERE
         film.film_id = 103
     ),
-
-    rented_films AS (
-    SELECT 
-        film_id,
-        customer_id
-    FROM
-        rental    
-    JOIN    
-        inventory USING(inventory_id)
-    JOIN
-        film USING(film_id)
-    ),  
 
     rented_bb AS (
     SELECT
